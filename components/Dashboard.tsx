@@ -81,9 +81,15 @@ const Dashboard: React.FC = () => {
       const res = await axios.get<StatsSummary>(`${BASE_URL}stats/summary`, {
         withCredentials: true,
       });
+      if(res.status==403){
+        router.push("/login")
+      }
       setStats(res.data);
-    } catch (error) {
+    } catch (error:any) {
       console.error("Error fetching summary:", error);
+      if(error?.response?.status==403){
+        router.push("/login")
+      }
     }
   };
 
@@ -93,9 +99,13 @@ const Dashboard: React.FC = () => {
         `${BASE_URL}registrations/state-wise`,
         { withCredentials: true }
       );
+      console.log("res", res)
       setStatewise(res.data);
-    } catch (error) {
+    } catch (error:any) {
       console.error("Error fetching statewise data:", error);
+       if(error?.response?.status==403){
+        router.push("/login")
+      }
     }
   };
 
@@ -120,9 +130,16 @@ const Dashboard: React.FC = () => {
         `${BASE_URL}registrations/month-wise`,
         { withCredentials: true }
       );
+      console.log("res", res)
+      if(res.status==403){
+        router.push("/login")
+      }
       setMonthly(res.data);
-    } catch (error) {
+    } catch (error:any) {
       console.error("Error fetching monthly data:", error);
+       if(error?.response?.status==403){
+        router.push("/login")
+      }
     }
   };
 
@@ -131,6 +148,10 @@ const Dashboard: React.FC = () => {
       const res = await axios.get<ScoreRange[]>(`${BASE_URL}scores/range`, {
         withCredentials: true,
       });
+      console.log("res", res)
+      if(res.status==403){
+        router.push("/login")
+      }
       setScoreRange(res.data);
     } catch (err) {
       console.error("Error fetching score range stats:", err);
@@ -155,7 +176,8 @@ const Dashboard: React.FC = () => {
     api
       .get("/auth/check")
       .then((res) => {
-        if (res.status == 403) {
+        console.log("res", res)
+        if (!res.data&&!res.data.username) {
           router.push("/login");
         }
       })

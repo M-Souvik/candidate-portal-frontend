@@ -65,7 +65,7 @@ export const LoginForm: React.FC = () => {
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="focus-visible:ring-indigo-500"
+              className="focus-visible:ring-blue-500"
               required
             />
 
@@ -75,13 +75,13 @@ export const LoginForm: React.FC = () => {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="focus-visible:ring-indigo-500 pr-10"
+                className="focus-visible:ring-blue-500 pr-10"
                 required
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-2 flex items-center text-gray-500 hover:text-indigo-600"
+                className="absolute inset-y-0 right-2 flex items-center text-gray-500 hover:text-blue-600"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
@@ -94,7 +94,7 @@ export const LoginForm: React.FC = () => {
             <Button
               type="submit"
               disabled={loading}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold flex items-center justify-center"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold flex items-center justify-center"
             >
               {loading ? (
                 <>

@@ -52,10 +52,10 @@ export const LoginForm: React.FC = () => {
   }, [navigate]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-500 to-blue-600">
-      <Card className="w-[400px] shadow-xl border-none bg-white/90 backdrop-blur-md">
+    <div className="flex min-h-screen items-center justify-center  lg:bg-blue-700">
+      <Card className="w-[400px] shadow-none sm:shadow-xl border-none bg-white/90 backdrop-blur-md">
         <CardHeader>
-          <CardTitle className="text-center text-2xl font-bold text-indigo-700">
+          <CardTitle className="text-center text-2xl font-bold text-blue-700">
             Welcome Back 👋
           </CardTitle>
         </CardHeader>

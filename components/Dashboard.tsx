@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -34,6 +34,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LogOut, Settings, User } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton"; // 👈 Add Skeleton
+import api from "@/lib/api";
+import { useRouter } from "next/navigation";
+import SkeletonBarChart from "./ui/bar-chart-skeleton";
 
 // --- Interfaces ---
 interface StatsSummary {
@@ -71,6 +75,7 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+  const router = useRouter();
 
   // --- Fetch functions ---
   const fetchSummary = async () => {
@@ -86,9 +91,10 @@ const Dashboard: React.FC = () => {
 
   const fetchStatewise = async () => {
     try {
-      const res = await axios.get<StatewiseData[]>(`${BASE_URL}registrations/state-wise`, {
-        withCredentials: true,
-      });
+      const res = await axios.get<StatewiseData[]>(
+        `${BASE_URL}registrations/state-wise`,
+        { withCredentials: true }
+      );
       setStatewise(res.data);
     } catch (error) {
       console.error("Error fetching statewise data:", error);
@@ -97,9 +103,10 @@ const Dashboard: React.FC = () => {
 
   const fetchMonthly = async () => {
     try {
-      const res = await axios.get<MonthlyData[]>(`${BASE_URL}registrations/month-wise`, {
-        withCredentials: true,
-      });
+      const res = await axios.get<MonthlyData[]>(
+        `${BASE_URL}registrations/month-wise`,
+        { withCredentials: true }
+      );
       setMonthly(res.data);
     } catch (error) {
       console.error("Error fetching monthly data:", error);
@@ -131,19 +138,80 @@ const Dashboard: React.FC = () => {
     loadDashboardData();
   }, []);
 
+  useEffect(() => {
+    api
+      .get("/auth/check")
+      .then((res) => {
+        if (res.status == 403) {
+          router.push("/login");
+        }
+      })
+      .catch(() => {});
+  }, [router]);
+
+  // --- Skeletons for loading state ---
   if (loading) {
-    return <p className="p-6 text-lg font-medium">Loading dashboard...</p>;
+    return (
+      <div className="p-6 space-y-6 animate-pulse">
+        {/* Header Skeleton */}
+        <div className="flex justify-between items-center bg-white rounded-xl px-2 py-1">
+          <div>
+            <Skeleton className="h-6 w-48 mb-2" />
+            <Skeleton className="h-4 w-64" />
+          </div>
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-10 w-10 rounded-full" />
+          </div>
+        </div>
+
+        {/* KPI Skeletons */}
+        <div className="grid grid-cols-4 gap-6">
+          {[...Array(4)].map((_, i) => (
+            <Card key={i}>
+              <CardContent className="p-5 text-center">
+                <Skeleton className="h-8 w-16 mx-auto mb-2" />
+                <Skeleton className="h-4 w-24 mx-auto" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Chart Skeletons */}
+        <div className="grid grid-cols-4 gap-6">
+          <Card className="col-span-2 h-64 py-0 flex items-center justify-center">
+             {/* <SkeletonBarChart bars={7} /> */}
+             <Skeleton className="h-full w-full rounded-md" />
+          </Card>
+          <Card className="col-span-2 h-64 py-0 flex items-center justify-center">
+            {/* 
+             <SkeletonBarChart bars={7} /> */}
+             {/* <SkeletonBarChart bars={7} /> */}
+             <Skeleton className="h-full w-full rounded-md" />
+
+          </Card>
+        </div>
+
+        <Card className="col-span-4 w-full h-[400px] py-0 flex items-center justify-center">
+             {/* <SkeletonBarChart bars={7} /> */}
+
+          <Skeleton className="h-full w-full rounded-md" />
+        </Card>
+      </div>
+    );
   }
 
+  // --- Main Dashboard ---
   return (
     <div className="p-6 space-y-6">
       {/* 🌟 Header Section */}
-      <div className="flex justify-between items-center bg-white rounded-xl  px-2 py-1">
+      <div className="flex justify-between items-center bg-white rounded-xl px-2 py-1">
         <div>
           <h1 className="text-2xl font-semibold text-gray-800">
-            Welcome back, <span className="text-blue-600">Student !</span>
+            Welcome back, <span className="text-blue-600">Student!</span>
           </h1>
-          <p className="text-sm text-gray-500">Here’s what’s happening today.</p>
+          <p className="text-sm text-gray-500">
+            Here’s what’s happening today.
+          </p>
         </div>
 
         {/* Avatar Dropdown */}
@@ -154,10 +222,6 @@ const Dashboard: React.FC = () => {
                 <AvatarImage src="/avatar.png" alt="User" />
                 <AvatarFallback>AD</AvatarFallback>
               </Avatar>
-              {/* <div className="hidden sm:flex flex-col">
-                <span className="text-sm font-medium text-gray-800">Admin</span>
-                <span className="text-xs text-gray-500">admin@dexit.com</span>
-              </div> */}
             </div>
           </DropdownMenuTrigger>
 
@@ -182,28 +246,36 @@ const Dashboard: React.FC = () => {
       <div className="grid grid-cols-4 gap-6">
         <Card>
           <CardContent className="p-5 text-center">
-            <h2 className="text-3xl font-bold text-blue-600">{stats.registered}</h2>
+            <h2 className="text-3xl font-bold text-blue-600">
+              {stats.registered}
+            </h2>
             <p className="text-gray-500">Total Applicants</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent className="p-5 text-center">
-            <h2 className="text-3xl font-bold text-blue-600">{stats.enrolled}</h2>
+            <h2 className="text-3xl font-bold text-blue-600">
+              {stats.enrolled}
+            </h2>
             <p className="text-gray-500">Enrolled Students</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent className="p-5 text-center">
-            <h2 className="text-3xl font-bold text-blue-600">{stats.avg || 0}</h2>
+            <h2 className="text-3xl font-bold text-blue-600">
+              {stats.avg || 0}
+            </h2>
             <p className="text-gray-500">Average Score</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent className="p-5 text-center">
-            <h2 className="text-3xl font-bold text-blue-600">{stats.subjects}</h2>
+            <h2 className="text-3xl font-bold text-blue-600">
+              {stats.subjects}
+            </h2>
             <p className="text-gray-500">Active Programs</p>
           </CardContent>
         </Card>
@@ -211,7 +283,6 @@ const Dashboard: React.FC = () => {
 
       {/* 📈 Charts Section */}
       <div className="grid grid-cols-4 gap-6">
-        {/* Statewise Bar Chart */}
         <Card className="col-span-2">
           <CardHeader>
             <CardTitle>Applications by Geography</CardTitle>
@@ -223,8 +294,14 @@ const Dashboard: React.FC = () => {
                 layout="vertical"
                 margin={{ top: 10, right: 30, left: 40, bottom: 10 }}
               >
-                <XAxis type="number" dataKey="total" domain={[0, "dataMax + 1"]} />
-                <YAxis type="category" dataKey="state" width={100} />
+                <XAxis type="number" dataKey="total" />
+                <YAxis
+  type="category"
+  dataKey="state"
+  width={90}
+  interval={0}   // ✅ Force show every label
+  tick={{ fontSize: 12 }}  // optional: smaller text to avoid overlap
+/>
                 <Tooltip />
                 <Bar dataKey="total" fill="#155dfc" barSize={25} radius={[0, 6, 6, 0]}>
                   <LabelList dataKey="total" position="right" />
@@ -234,7 +311,6 @@ const Dashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* Monthly Line Chart */}
         <Card className="col-span-2">
           <CardHeader>
             <CardTitle>Month-wise Registrations</CardTitle>
@@ -260,7 +336,9 @@ const Dashboard: React.FC = () => {
 
       {/* 🎯 Score Range Chart */}
       <Card className="col-span-4 w-full rounded-2xl shadow-md p-4">
-        <h2 className="text-lg font-semibold mb-4">Student Score Distribution</h2>
+        <h2 className="text-lg font-semibold mb-4">
+          Student Score Distribution
+        </h2>
         <ResponsiveContainer width="100%" height={400}>
           <BarChart data={scoreRange} margin={{ left: 40, right: 40 }}>
             <CartesianGrid strokeDasharray="3 3" />

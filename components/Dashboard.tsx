@@ -173,7 +173,7 @@ const Dashboard: React.FC = () => {
           <Skeleton className="h-10 w-10 rounded-full" />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
             <Card key={i}>
               <CardContent className="p-4 text-center">

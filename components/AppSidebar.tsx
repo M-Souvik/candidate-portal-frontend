@@ -36,7 +36,7 @@ export function AppSidebar() {
     <Sidebar className="bg-white border-r border-gray-200 shadow-sm">
       {/* Header / Brand */}
       <SidebarHeader className="flex items-center justify-center py-4 border-b">
-        <h1 className="text-xl font-semibold tracking-tight text-indigo-600">
+        <h1 className="text-xl font-semibold tracking-tight text-[#0D6ABF]">
           DEX<span className="text-gray-700"> IT</span>
         </h1>
       </SidebarHeader>

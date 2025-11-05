@@ -227,7 +227,7 @@ const Dashboard: React.FC = () => {
       <div className="flex flex-row justify-between items-start sm:items-center bg-white rounded-xl px-3 py-2 gap-3">
         <div>
           <h1 className="text-xl font-semibold text-gray-800">
-            Welcome back, <span className="text-blue-600">Student!</span>
+            Welcome back, <span className="text-[#0D6ABF]">Student!</span>
           </h1>
           <p className="text-sm text-gray-500">Here’s what's happening today.</p>
         </div>
@@ -257,7 +257,7 @@ const Dashboard: React.FC = () => {
         {[{label:"Total Applicants",value:stats.registered},{label:"Enrolled Students",value:stats.enrolled},{label:"Average Score",value:stats.avg},{label:"Active Programs",value:stats.subjects}].map((item,i)=>(
           <Card key={i}>
             <CardContent className="p-5 text-center">
-              <h2 className="text-3xl font-bold text-blue-600">{item.value}</h2>
+              <h2 className="text-3xl font-bold text-[#0D6ABF]">{item.value}</h2>
               <p className="text-gray-500">{item.label}</p>
             </CardContent>
           </Card>
@@ -273,7 +273,7 @@ const Dashboard: React.FC = () => {
                 <XAxis type="number" dataKey="total" />
                 <YAxis type="category" dataKey="state" width={90} interval={0} tick={{ fontSize: 12 }} />
                 <Tooltip />
-                <Bar dataKey="total" fill="#155dfc" barSize={25} radius={[0, 6, 6, 0]}>
+                <Bar dataKey="total" fill="#0D6ABF" barSize={25} radius={[0, 6, 6, 0]}>
                   <LabelList dataKey="total" position="right" />
                 </Bar>
               </BarChart>
@@ -289,7 +289,7 @@ const Dashboard: React.FC = () => {
                 <XAxis dataKey="month" />
                 <YAxis allowDecimals={false} />
                 <Tooltip />
-                <Line type="monotone" dataKey="count" stroke="#155dfc" strokeWidth={3} dot={false} />
+                <Line type="monotone" dataKey="count" stroke="#0D6ABF" strokeWidth={3} dot={false} />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
@@ -304,7 +304,7 @@ const Dashboard: React.FC = () => {
             <YAxis />
             <XAxis dataKey="score_range" />
             <Tooltip />
-            <Bar dataKey="student_count" fill="#155dfc" radius={[8,8,0,0]}>
+            <Bar dataKey="student_count" fill="#0D6ABF" radius={[8,8,0,0]}>
               <LabelList dataKey="student_count" position="top" />
             </Bar>
           </BarChart>
